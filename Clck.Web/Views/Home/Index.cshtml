@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Сокращение ссылок";
+}
+
+<div class="text-center">
+    <form class="row" id="linkform">
+        <div class="col">
+            <input id="url" name="url" class="form-control col-auto" type="text" placeholder="Введите ссылку, которую нужно сократить">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-3 col-auto">Сократить</button>
+        </div>
+    </form>
+
+    <div id="short" class="bg-white" style="display: none;">
+        <a id="shorturl" target="_blank" style="text-decoration:none;"></a>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $("#linkform").submit(function(e) {
+            e.preventDefault();
+            var url = $("#url").val();
+            if (url != '') {
+                $.ajax({
+                    type: 'get',
+                    url: '/home/create?url=' + url,
+                    success: function(s) {
+                        var shorturl = '@Context.Request.Host/' + s.id;
+                        $('#short').show();
+                        $('#shorturl').attr('href', s.id);
+                        $('#shorturl').text(shorturl);
+                    }
+                })
+            }
+        });
+    </script>
+}
